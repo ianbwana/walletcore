@@ -3,6 +3,7 @@
  services:
    db:
      image: postgres
+     restart: always
      environment:
        - POSTGRES_DB=postgres
        - POSTGRES_USER=postgres
