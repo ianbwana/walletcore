@@ -22,13 +22,14 @@ class Wallet(Auditable):
         ("savings", SAVINGS),
         ("current", CURRENT)
     ]
-    name = models.CharField(max_length=124, help_text="A name for this wallet")
-    description = models.TextField(help_text="A description for this wallet")
+    name = models.CharField(max_length=124, help_text="A name for this wallet", blank=True)
+    description = models.TextField(help_text="A description for this wallet", null=True)
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         help_text="Wallet owner",
         blank=True,
         null=True,
+        related_name="wallet",
         on_delete=models.PROTECT
     )
     type = models.CharField(choices=WALLET_TYPES, default=CURRENT, max_length=10)
@@ -45,7 +46,7 @@ class Wallet(Auditable):
 class Account(Auditable):
     name = models.CharField(max_length=100, help_text="A name for this account")
     description = models.TextField(help_text="A brief description of this account")
-    wallet = models.ForeignKey(
+    wallet = models.OneToOneField(
         "wallet.Wallet",
         help_text="The wallet this account is related to",
         related_name="accounts",
@@ -57,6 +58,9 @@ class Account(Auditable):
     OPEN, FROZEN, CLOSED = "Open", "Frozen", "Closed"
     status = models.CharField(max_length=32, default=OPEN)
     can_be_overdrawn = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
 
 class Transfer(Auditable):
