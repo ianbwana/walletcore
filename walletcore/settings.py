@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
+    'django_extensions',
     'wallet',
     'accounts',
     'walletcoreapi',
@@ -80,27 +81,27 @@ WSGI_APPLICATION = 'walletcore.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'mobilewallet2020',
-#         'USER': 'mobilewalletadmin',
-#         'PASSWORD': 'mobilewallet2020',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'mobilewallet2020',
+        'USER': 'mobilewalletadmin',
+        'PASSWORD': 'mobilewallet2020',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'db',
+#         'PORT': 5432,
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -110,7 +111,7 @@ DATABASES = {
 # }
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
 
-
+AUTH_USER_MODEL = 'accounts.WalletUser'
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
