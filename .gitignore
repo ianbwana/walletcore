@@ -328,7 +328,7 @@ fabric.properties
 # pytype static type analyzer
 
 # profiling data
-
+db.sqlite3
 ### vscode ###
 .vscode/*
 !.vscode/settings.json
