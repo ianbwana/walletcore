@@ -25,7 +25,7 @@ SECRET_KEY = '0atd=l9_41pj-r$2wc%j7%im0c_^on082*cyr@$idxt%jg4m6z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'https://walletcore.herokuapp.com/']
 
 
 # Application definition
