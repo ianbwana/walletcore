@@ -95,6 +95,7 @@ target/
 # IPython
 profile_default/
 ipython_config.py
+mydb.dump
 
 # pyenv
 .python-version
