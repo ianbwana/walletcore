@@ -24,7 +24,24 @@ def create_user_profile(sender, instance, created=False, **kwargs):
 @receiver(post_save, sender=Transfer)
 def create_entries(sender, instance, created=False, **kwargs):
     try:
-        if instance.source != instance.destination:
+
+        if instance.source.id == instance.destination.id and \
+                instance.transaction_type == "credit":
+            AccountEntry.objects.create(
+                transaction=instance,
+                account=instance.source,
+                amount=instance.amount,
+                description=instance.message
+            )
+        elif instance.source.id == instance.destination.id and \
+                instance.transaction_type == "debit":
+            AccountEntry.objects.create(
+                transaction=instance,
+                account=instance.source,
+                amount=-instance.amount,
+                description=instance.message
+            )
+        if instance.source.id != instance.destination.id:
             AccountEntry.objects.create(
                 transaction=instance,
                 account=instance.source,
@@ -35,22 +52,6 @@ def create_entries(sender, instance, created=False, **kwargs):
                 transaction=instance,
                 account=instance.destination,
                 amount=instance.amount,
-                description=instance.message
-            )
-        elif instance.source == instance.destination and \
-                instance.transaction_type == "credit":
-            AccountEntry.objects.create(
-                transaction=instance,
-                account=instance.source,
-                amount=instance.amount,
-                description=instance.message
-            )
-        elif instance.source == instance.destination and \
-                instance.transaction_type == "debit":
-            AccountEntry.objects.create(
-                transaction=instance,
-                account=instance.source,
-                amount=-instance.amount,
                 description=instance.message
             )
 
