@@ -96,6 +96,7 @@ class WalletTransferView(APIView):
 class AccountEntryListView(APIView):
     serializer_class = AccountEntrySerializer
     queryset = AccountEntry.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, userid, format=None):
         if "userid" in self.kwargs and self.kwargs["userid"]:

@@ -13,9 +13,17 @@ class ProfileListView(generics.ListCreateAPIView):
 
 
 class WalletUserListView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    '''
+    This view returns the details of the admin solely for auth purposes.
+    click on log in on the rest framework console
+    enter the provided username as username,
+    enter the provided password as password
+    You can use these credentials to also log into the admin console.
+    You can also navigate to /api/v1/docs/ to view the swagger documentation.
+    If no swagger documentation is show, click on the sessin login button to authorize
+    '''
     serializer_class = WalletUserSerializer
-    queryset = WalletUser.objects.all()
+    queryset = WalletUser.objects.all()[:1]
 
 
 class WalletUserDetailView(generics.RetrieveAPIView):
