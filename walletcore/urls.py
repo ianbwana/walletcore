@@ -22,5 +22,5 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('api/v1/', include('walletcoreapi.urls')),
     path('admin/', admin.site.urls),
-    url(r'^', RedirectView.as_view(url="/admin/")),
+    url(r'^', RedirectView.as_view(url="/api/v1/users/")),
 ]
