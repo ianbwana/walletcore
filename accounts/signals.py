@@ -20,6 +20,5 @@ def create_user_profile(sender, instance, created=False, **kwargs):
             description=wallet_description
         )
         Token.objects.get_or_create(user=instance)
-        print("profile and token created")
-    except AttributeError:
-        print("error")
+    except Exception as e:
+        print(e)

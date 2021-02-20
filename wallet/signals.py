@@ -17,8 +17,8 @@ def create_user_profile(sender, instance, created=False, **kwargs):
             description=account_description,
             wallet=instance
         )
-    except AttributeError:
-        print("error")
+    except Exception as e:
+        print(e)
 
 
 @receiver(post_save, sender=Transfer)
