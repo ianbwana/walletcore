@@ -1,1 +1,1 @@
-web:gunicorn walletcore.wsgi
+web: gunicorn walletcore.wsgi
