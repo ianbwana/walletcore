@@ -14,13 +14,29 @@ class ProfileListView(generics.ListCreateAPIView):
 
 class WalletUserListView(generics.ListAPIView):
     '''
-    This view returns the details of the admin solely for auth purposes.
-    click on log in on the rest framework console
-    enter the provided username as username,
-    enter the provided password as password
-    You can use these credentials to also log into the admin console.
-    You can also navigate to /api/v1/docs/ to view the swagger documentation.
-    If no swagger documentation is show, click on the sessin login button to authorize
+    This view returns the details of a test admin.
+
+    Click on the login button on the rest framework console.
+
+    Enter "walletadmin"as username.
+
+    Enter "mobilewallet2020" as password.
+
+    You can also use these credentials to log into the admin console:
+    https://walletcore.herokuapp.com/admin/
+
+    You can also navigate to /api/v1/docs/ to view the swagger documentation:
+    https://walletcore.herokuapp.com/api/v1/docs/
+
+    Which should show endpoints for:
+    1.docs
+    2.profiles
+    3.transfers
+    4.users
+
+    If no swagger documentation is on display, click on the session login button to authorize
+
+
     '''
     serializer_class = WalletUserSerializer
     queryset = WalletUser.objects.all()[:1]
