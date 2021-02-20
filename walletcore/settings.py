@@ -12,16 +12,17 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import django_heroku
 import os
 import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0atd=l9_41pj-r$2wc%j7%im0c_^on082*cyr@$idxt%jg4m6z'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -93,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'walletcore',
         'USER': 'walletadmin',
-        'PASSWORD': 'mobilewallet2020',
+        'PASSWORD': os.getenv('PGPASSWORD'),
         'HOST': 'localhost',
         'PORT': '',
     }
