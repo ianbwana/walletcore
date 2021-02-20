@@ -17,13 +17,33 @@ urlpatterns = [
         name="user-transfers",
     ),
     url(
-        r"^wallets/$",
-        wallet.WalletListView.as_view(),
+        r"^users/$",
+        accounts.WalletUserListView.as_view(),
+        name="wallet-users",
+    ),
+    url(
+        r"^users/(?P<pk>-?\d+)/$",
+        accounts.WalletUserDetailView.as_view(),
+        name="wallet-user-details",
+    ),
+    url(
+        r"^users/(?P<pk>-?\d+)/profile/$",
+        accounts.WalletUserProfileView.as_view(),
+        name="user-profile",
+    ),
+    url(
+        r"^users/(?P<userid>-?\d+)/transactions/$",
+        accounts.WalletUserTransactionView.as_view(),
+        name="user-transactions",
+    ),
+    url(
+        r"^users/(?P<pk>-?\d+)/wallet/$",
+        wallet.WalletDetailView.as_view(),
         name="user-wallets",
     ),
     url(
-        r"^accounts/$",
-        wallet.AccountsListView.as_view(),
+        r"^users/(?P<pk>-?\d+)/account/$",
+        wallet.AccountDetailView.as_view(),
         name="user-accounts",
     ),
     url(
@@ -31,5 +51,23 @@ urlpatterns = [
         accounts.ProfileListView.as_view(),
         name="user-profiles",
     ),
+    url(
+        r"^users/(?P<userid>-?\d+)/wallet/transfer/$",
+        wallet.WalletTransferView.as_view(),
+        name="partner-wallet-transaction",
+    ),
+    url(
+        r"^users/(?P<userid>-?\d+)/wallet/transact/$",
+        wallet.AccountDepositWithdrawView.as_view(),
+        name="partner-wallet-transaction",
+    ),
+    url(
+        r"^users/(?P<userid>-?\d+)/transactions/$",
+        wallet.AccountEntryListView.as_view(),
+        name="user-account-transactions",
+    ),
 
+]
+urlpatterns += [
+    path('api-auth/', include('rest_framework.urls')),
 ]

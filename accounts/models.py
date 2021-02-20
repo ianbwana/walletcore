@@ -10,7 +10,7 @@ class WalletUser(AbstractUser):
     pass
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return self.username
 
 
 class Profile(models.Model):
@@ -36,16 +36,17 @@ class Profile(models.Model):
         (FIFTY_FIVE_SIXTY_FOUR, _("Fifty five to sixty four")),
         (ABOVE_SIXTY_FIVE, _("Above sixty five")),
     )
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=10, null=True, blank=True)
-    age = models.CharField(choices=AGE_RANGES, max_length=8, null=True, blank=True)
-
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    gender = models.CharField(choices=GENDER_CHOICES,
+                              max_length=10, null=True, blank=True)
+    age = models.CharField(
+        choices=AGE_RANGES, max_length=8, null=True, blank=True)
 
     def __str__(self):
-        return self.user.first_name + self.user.last_name
+        return self.user.username
 
     @property
     def token(self):
         token, _ = Token.objects.get_or_create(user=self.user)
         return token.key
-

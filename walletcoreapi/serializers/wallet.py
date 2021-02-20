@@ -1,22 +1,45 @@
 from rest_framework import serializers
 from wallet.models import *
 
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Account
-        fields = '__all__'
-        depth = 2
-
-
-class TransferSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Transfer
-        fields = '__all__'
-        depth = 2
-
 
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet
+        fields = (
+            'name',
+            'description',
+            'user',
+            'type'
+        )
+
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = (
+            'id',
+            'active',
+            'balance',
+            'wallet',
+            'status'
+        )
+
+
+class TransferSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Transfer
+        fields = (
+            'message',
+            'source',
+            'destination',
+            'amount',
+            'reference',
+            'transaction_type'
+        )
+
+
+class AccountEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountEntry
         fields = '__all__'
-        depth = 2

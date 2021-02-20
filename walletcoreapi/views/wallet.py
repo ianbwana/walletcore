@@ -1,127 +1,174 @@
-from rest_framework import generics, status
+import json
+import uuid
+from rest_framework import generics, status, permissions, exceptions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from wallet.models import *
+from accounts.models import *
+from wallet.utils import get_account_balance
+from wallet.exceptions import *
 from walletcoreapi.serializers.wallet import *
 
 
 class TransfersListView(generics.ListCreateAPIView):
-    """
-        To initiate an mpesa transfer send the following to this url
-
-            {
-
-                "amount": 1000,
-                "thirdparty": "mpesa",
-                "todo": "initiate"
-
-            }
-        The customer will get a one time pin.
-        You will receive either a status of 200 if the customer has funds
-        or a status of 403 if they have no funds or auth failed.
-
-        To complete the transaction send a similar payload but with the otp the customer received:
-
-
-            {
-                "amount": 1000,
-                "thirdparty": "mpesa",
-                "todo": "complete",
-                "otp": 1234
-
-            }
-
-        To initiate a paybill transfer:
-            {
-
-                "amount": 1000,
-                "thirdparty": "paybill",
-                "paybill": 123,
-                "todo": "initiate",
-                 "account_number": 123
-
-            }
-
-        To complete a paybill transfer:
-            {
-
-                "amount": 1000,
-                "thirdparty": "paybill",
-                "paybill": 123,
-                "todo": "complete",
-                "otp": 1234,
-                "account_number": 123
-
-            }
-
-        To initiate a till number transfer:
-            {
-
-                "amount": 1000,
-                "thirdparty": "tillnumber",
-                "paybill": 123,
-                "todo": "initiate",
-
-            }
-
-        To complete a till transfer:
-            {
-
-                "amount": 1000,
-                "thirdparty": "tillnumber",
-                "paybill": 123,
-                "todo": "complete",
-                "otp": 1234,
-
-            }
-
-
-
-        To initiate a bank transaction:
-        Send the following payload.
-
-            {
-                "amount": 100,
-                "thirdparty": "bank",
-                "bank_code": "123",
-                "bank_name": "abc xyz",
-                "bank_account": "012345668",
-                "narration": "Transfer to abc bank",
-                "todo": "initiate"
-
-            }
-        The user will get an expiring otp that you send with the txn.
-
-
-
-         To complete the given bank transaction a bank transaction:
-         Send the following payload.
-
-            {
-                "amount": 100,
-                "thirdparty": "bank",
-                "bank_code": "123",
-                "bank_name": "abc xyz",
-                "bank_account": "012345668",
-                "narration": "Transfer to abc bank",
-                "otp": "567890",
-                "todo" "complete"
-
-            }
-
-
-
-
-        """
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = TransferSerializer
     queryset = Transfer.objects.all()
 
 
-class AccountsListView(generics.ListCreateAPIView):
+class AccountDetailView(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
 
 
-class WalletListView(generics.ListCreateAPIView):
+class WalletDetailView(generics.RetrieveAPIView):
     serializer_class = WalletSerializer
-    queryset = Wallet.objects.all()
+    queryset = Wallet.objects.prefetch_related("user", "accounts")
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class WalletTransferView(APIView):
+    """
+        To initiate a funds transfer transfer send a request to this url
+        with payload data;
+            {
+            action: String(Action to be carried out),
+            amount: Integer(Amount to be sent),
+            source: Integer(representing source ID),
+            destination: Integer(representing destination ID),
+            message: String(message to send with the transaction
+            }
+             For Example:
+
+            {
+                "action": "transact"
+                "amount": 1000,
+                "source": 5,
+                "destination": 6,
+            }
+
+            NB: The transaction reference is created automatically on the post method
+        """
+    serializer_class = TransferSerializer
+    queryset = Transfer.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        if get_account_balance(request.data["source"]) == 0:
+            return Response(
+                {"message": "Your account does not have a balance"},
+                status=status.HTTP_403_FORBIDDEN)
+
+        if request.data["source"] != request.data["destination"] and \
+                get_account_balance(request.data["source"]) > 0 and \
+                get_account_balance(request.data["source"]) >= request.data["amount"]:
+
+            reference = str(uuid.uuid4()).replace("-", "")
+            data = {
+                "message": request.data["message"],
+                "source": request.data["source"],
+                "destination": request.data["destination"],
+                "amount": request.data["amount"],
+                "transaction_type": "credit",
+                "reference": reference
+            }
+            serializer = TransferSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, userid, format=None):
+        queryset = Transfer.objects.all()
+        if "userid" in self.kwargs and self.kwargs["userid"]:
+            queryset = queryset.filter(
+                destination__wallet__user__id=self.kwargs["userid"]) | queryset.filter(
+                source__wallet__user__id=self.kwargs["userid"])
+        else:
+            queryset = Transfer.objects.none()
+        qs_serializer = self.serializer_class(
+            queryset, many=True, context={"request": request}
+        )
+        return Response(qs_serializer.data, status=status.HTTP_200_OK)
+
+
+class AccountEntryListView(APIView):
+    serializer_class = AccountEntrySerializer
+    queryset = AccountEntry.objects.all()
+
+    def get(self, request, userid, format=None):
+        if "userid" in self.kwargs and self.kwargs["userid"]:
+            queryset = self.queryset.filter(
+                account__wallet__user__id=self.kwargs["userid"])
+        else:
+            queryset = AccountEntry.objects.none()
+        qs_serializer = self.serializer_class(
+            queryset, many=True, context={"request": request}
+        )
+        return Response(qs_serializer.data, status=status.HTTP_200_OK)
+
+
+class AccountDepositWithdrawView(APIView):
+    """
+        To initiate a funds withdrawal/deposit send a request to this url
+        with payload data;
+            {
+            action: String(Action to be carried out),
+            amount: Integer(Amount to be sent),
+            source: Integer(representing source ID),
+            }
+
+             For Example if depositing:
+
+            {
+                "action": "deposit",
+                "amount": 1000,
+                "source": 5,
+            }
+
+            And for withdrawing would be:
+
+
+            {
+                "action": "withdraw",
+                "amount": 1000,
+                "source": 5,
+            }
+
+            NB: The transaction reference, message and type are created automatically on the post method
+        """
+
+    serializer_class = TransferSerializer
+    queryset = Transfer.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        if request.data['action'] == "withdraw":
+            type = "debit"
+            message = "Withdrawal of SGD {} from wallet".format(request.data["amount"])
+        elif request.data['action'] == "deposit":
+            type = "credit"
+            message = "Deposit of SGD {} to wallet".format(request.data["amount"])
+
+        reference = str(uuid.uuid4()).replace("-", "")
+        data = {
+            "message": message,
+            "source": request.data["source"],
+            "destination": request.data["source"],
+            "amount": request.data["amount"],
+            "transaction_type": type,
+            "reference": reference
+        }
+        serializer = TransferSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, userid, format=None):
+        queryset = Transfer.objects.none()
+        qs_serializer = self.serializer_class(
+            queryset, many=True, context={"request": request}
+        )
+        return Response(qs_serializer.data, status=status.HTTP_200_OK)
