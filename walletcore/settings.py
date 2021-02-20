@@ -25,7 +25,7 @@ SECRET_KEY = '0atd=l9_41pj-r$2wc%j7%im0c_^on082*cyr@$idxt%jg4m6z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'https://walletcore.herokuapp.com/']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0','127.0.0.1', 'https://walletcore.herokuapp.com/']
 
 
 # Application definition
@@ -92,6 +92,17 @@ WSGI_APPLICATION = 'walletcore.wsgi.application'
 #         'PORT': '5342',
 #     }
 # }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'db',
+#         'PORT': 5432,
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -110,16 +121,6 @@ if os.environ.get('GITHUB_WORKFLOW'):
         }
     }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'postgres',
-#         'HOST': 'db',
-#         'PORT': 5432,
-#     }
-# }
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
