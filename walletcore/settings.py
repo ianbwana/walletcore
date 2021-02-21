@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'wallet',
     'accounts',
     'walletcoreapi',
+    'coverage'
 ]
 
 MIDDLEWARE = [
@@ -96,6 +97,10 @@ DATABASES = {
         'PASSWORD': 'mobilewallet2020',
         'HOST': 'localhost',
         'PORT': '',
+        'TEST': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        },
     }
 }
 # DATABASES = {
@@ -113,8 +118,15 @@ if os.environ.get('GITHUB_WORKFLOW'):
            'PASSWORD': 'postgres',
            'HOST': '127.0.0.1',
            'PORT': '5432',
+            'TEST': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            },
         }
     }
+import sys
+if 'test' in sys.argv or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
