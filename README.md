@@ -15,6 +15,7 @@ Walletcore is a light peer-to-peer money transfer app built using django
     - Django
     - Django Rest Framework
     - Postgresql
+    - Django Rest Swagger
 
 #### Clone the Repo and enter the project folder.
 ```bash
@@ -64,6 +65,20 @@ docker-compose build
 docker-compose up -d
 ```
 
+#### ENDPOINTS
+These are the main endpoints to demonstrate the requirements of this application. Some require auth token authorization
+The format is "https://walletcore.herokuapp.com/" + endpoint
+
+| Endpoint  | method |Summary|             
+| ------------- | ------------- |------------|
+| /admin  | GET/POST/PATCH  |      The main adnin console that comes with Django      |
+| /api/v1/docs/  | GET          |  Show the main application endpoints on a Swagger UI
+| /api/v1/users  | GET  | Show all the registered users. Currently just limited to main admin            |
+| api/v1/users/<user_id>  | GET  | Returns details about a registered user            |
+| api/v1/users/<user_id>/wallet/transfer/  | GET/POST  | Main peer to peer transfer endpoint           |
+| api/v1/users/<user_id>/wallet/transact/  | GET/POST  | Allows for deposit and withdrawal of funds into a user's account           |
+
+
 ### Assumptions
 1. There is only one user per account
 2. The application only works one currency(SGD) but has been built to be extensible to other currencies.
@@ -79,3 +94,6 @@ Additional features may include:
 2. Including a funds maturity period
 3. Sendind more customer data including sender/receiver device details to improve fraud prevention
 4. Logging errors and events
+
+#### Note
+Test coverage is only at 38%
