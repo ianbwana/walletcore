@@ -42,6 +42,6 @@ jobs:
     - name: Run migrations
       run: python manage.py migrate
     - name: Run tests
-      run: coverage run python manage.py test -v 2
+      run: coverage run manage.py test -v 2
     - name: Run coveralls
       run: coveralls
