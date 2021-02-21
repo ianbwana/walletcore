@@ -2,7 +2,7 @@
 
 
 ## Description
-Walletcore is a light peer-to-peer money transfer app built using django
+Walletcore is a light peer-to-peer money transfer API built using django. Users can deposit and withdraw money as well as send money to other registered users.
 
 #### Requirements
 1. [Python3.6](https://www.python.org/downloads/)
