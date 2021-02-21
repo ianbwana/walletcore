@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'wallet',
     'accounts',
     'walletcoreapi',
-    'coverage'
+    #'coverage'
 ]
 
 MIDDLEWARE = [
