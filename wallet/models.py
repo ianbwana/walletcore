@@ -59,7 +59,7 @@ class Account(Auditable):
     )
     description = models.TextField(
         help_text="A brief description of this account")
-    wallet = models.OneToOneField(
+    wallet = models.ForeignKey(
         "wallet.Wallet",
         help_text="The wallet this account is related to",
         related_name="accounts",
