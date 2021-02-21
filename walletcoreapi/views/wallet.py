@@ -11,18 +11,27 @@ from walletcoreapi.serializers.wallet import *
 
 
 class TransfersListView(generics.ListCreateAPIView):
+    """
+        Return details about a User's transactions
+    """
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = TransferSerializer
     queryset = Transfer.objects.all()
 
 
 class AccountDetailView(generics.RetrieveUpdateAPIView):
+    """
+        Return details about a User's account
+    """
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
 
 
 class WalletDetailView(generics.RetrieveAPIView):
+    """
+        Return details about a User's wallet
+    """
     serializer_class = WalletSerializer
     queryset = Wallet.objects.prefetch_related("user", "accounts")
     permission_classes = [permissions.IsAuthenticated]
@@ -42,7 +51,7 @@ class WalletTransferView(APIView):
              For Example:
 
             {
-                "action": "transact"
+                "action": "tranfer"
                 "amount": 1000,
                 "source": 5,
                 "destination": 6,
