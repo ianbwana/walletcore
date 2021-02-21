@@ -38,9 +38,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.contenttypes',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'wallet',
     'accounts',
     'walletcoreapi',
-    'coverage'
+    # 'coverage'
 ]
 
 MIDDLEWARE = [
@@ -93,26 +93,43 @@ WSGI_APPLICATION = 'walletcore.wsgi.application'
 
 #Local DB
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'walletcore',
-        'USER': 'walletadmin',
-        'PASSWORD': 'mobilewallet2020',
-        'HOST': 'localhost',
-        'PORT': '',
-        'TEST': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        },
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'walletcore',
+#         'USER': 'walletadmin',
+#         'PASSWORD': 'mobilewallet2020',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#         'TEST': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         },
+#     }
+# }
+
+#Default SQLite3 DB
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+#DOCKER DB
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
+    }
+}
+
+#GITHUB ACTIONS DB
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
