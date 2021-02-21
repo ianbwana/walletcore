@@ -40,6 +40,5 @@ class TransferException(Exception):
     pass
 
 
-
 class DuplicateTransaction(TransferException):
     pass
