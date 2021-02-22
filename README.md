@@ -54,6 +54,11 @@ python manage.py runserver
 ```
 Open [localhost:8000](http://127.0.0.1:8000/)
 
+To test, run:
+```bash
+python manage.py test
+```
+
 A hosted LIVE DEMO of this app can be found [here](https://walletcore.herokuapp.com/)
 
 #### TO RUN ON DOCKER
