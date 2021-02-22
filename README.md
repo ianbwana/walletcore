@@ -96,4 +96,4 @@ Additional features may include:
 4. Logging errors and events
 
 #### Note
-Test coverage is only at 38%
+Test coverage is at 38%
