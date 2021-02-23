@@ -11,11 +11,11 @@ from walletcoreapi.views import(
 schema_view = get_swagger_view(title='MobileWallet2020')
 urlpatterns = [
     url(r'^docs/', schema_view, name='walletcore-api-docs'),
-    url(
-        r"^transfers/$",
-        wallet.TransfersListView.as_view(),
-        name="user-transfers",
-    ),
+    # url(
+    #     r"^transfers/$",
+    #     wallet.TransfersListView.as_view(),
+    #     name="user-transfers",
+    # ),
     url(
         r"^users/$",
         accounts.WalletUserListView.as_view(),
@@ -26,11 +26,11 @@ urlpatterns = [
         accounts.WalletUserDetailView.as_view(),
         name="wallet-user-details",
     ),
-    url(
-        r"^users/(?P<pk>-?\d+)/profile/$",
-        accounts.WalletUserProfileView.as_view(),
-        name="user-profile",
-    ),
+    # url(
+    #     r"^users/(?P<pk>-?\d+)/profile/$",
+    #     accounts.WalletUserProfileView.as_view(),
+    #     name="user-profile",
+    # ),
     url(
         r"^users/(?P<userid>-?\d+)/transactions/$",
         accounts.WalletUserTransactionView.as_view(),
@@ -46,11 +46,11 @@ urlpatterns = [
         wallet.AccountDetailView.as_view(),
         name="user-accounts",
     ),
-    url(
-        r"^profiles/$",
-        accounts.ProfileListView.as_view(),
-        name="user-profiles",
-    ),
+    # url(
+    #     r"^profiles/$",
+    #     accounts.ProfileListView.as_view(),
+    #     name="user-profiles",
+    # ),
     url(
         r"^users/(?P<userid>-?\d+)/wallet/transfer/$",
         wallet.WalletTransferView.as_view(),

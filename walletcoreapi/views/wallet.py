@@ -51,10 +51,12 @@ class WalletTransferView(APIView):
              For Example:
 
             {
-                "action": "tranfer"
+                "action": "tranfer",
+                "message: "Here is some money",
                 "amount": 1000,
                 "source": 5,
                 "destination": 6,
+                "type": "credit"
             }
 
             NB: The transaction reference is created automatically on the post method
@@ -64,6 +66,8 @@ class WalletTransferView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        if "userid" in self.kwargs and self.kwargs["userid"]:
+            user = self.kwargs["userid"]
         if get_account_balance(request.data["source"]) == 0:
             return Response(
                 {"message": "Your account does not have a balance"},
@@ -76,10 +80,10 @@ class WalletTransferView(APIView):
             reference = str(uuid.uuid4()).replace("-", "")
             data = {
                 "message": request.data["message"],
-                "source": request.data["source"],
+                "source": user,
                 "destination": request.data["destination"],
                 "amount": request.data["amount"],
-                "transaction_type": "credit",
+                "transaction_type": "debit",
                 "reference": reference
             }
             serializer = TransferSerializer(data=data)

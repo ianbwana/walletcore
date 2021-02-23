@@ -90,15 +90,15 @@ The format is "https://walletcore.herokuapp.com/" + endpoint
 3. There must be a way to deposit or withdraw money(implemented but not included in terms of reference).
 4. There must be a way to reverse transactions
 5. The hosted version of the application is not running on Debug mode but is not optimised for production either so some environmental variables are still visible.
-6. Running the application in docker require docker-desktop to be installed
+6. Running the application in docker requires docker-desktop to be installed
 
 ### Roadmap
 Additional features may include:
 
 1. Including a transfer reversal method
 2. Including a funds maturity period
-3. Sendind more customer data including sender/receiver device details to improve fraud prevention
+3. Sending more customer data including sender/receiver device details to improve fraud prevention
 4. Logging errors and events
 
 #### Note
-Test coverage is at 38%
+Test coverage is currently at 38%
