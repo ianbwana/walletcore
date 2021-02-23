@@ -2,7 +2,7 @@
 
 
 ## Description
-Walletcore is a light peer-to-peer money transfer app built using django
+Walletcore is a light peer-to-peer money transfer API built using django. Users can deposit and withdraw money as well as send money to other registered users.
 
 #### Requirements
 1. [Python3.6](https://www.python.org/downloads/)
@@ -54,6 +54,11 @@ python manage.py runserver
 ```
 Open [localhost:8000](http://127.0.0.1:8000/)
 
+To test, run:
+```bash
+python manage.py test
+```
+
 A hosted LIVE DEMO of this app can be found [here](https://walletcore.herokuapp.com/)
 
 #### TO RUN ON DOCKER
@@ -85,15 +90,15 @@ The format is "https://walletcore.herokuapp.com/" + endpoint
 3. There must be a way to deposit or withdraw money(implemented but not included in terms of reference).
 4. There must be a way to reverse transactions
 5. The hosted version of the application is not running on Debug mode but is not optimised for production either so some environmental variables are still visible.
-6. Running the application in docker require docker-desktop to be installed
+6. Running the application in docker requires docker-desktop to be installed
 
 ### Roadmap
 Additional features may include:
 
 1. Including a transfer reversal method
 2. Including a funds maturity period
-3. Sendind more customer data including sender/receiver device details to improve fraud prevention
+3. Sending more customer data including sender/receiver device details to improve fraud prevention
 4. Logging errors and events
 
 #### Note
-Test coverage is only at 38%
+Test coverage is currently at 38%
