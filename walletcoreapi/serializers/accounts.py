@@ -36,5 +36,5 @@ class WalletUserSerializer(serializers.ModelSerializer):
             'email',
             'transactions',
             'balance',
-            'password'
+            # 'password'
         )

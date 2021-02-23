@@ -50,7 +50,7 @@ class WalletUserDetailView(generics.RetrieveAPIView):
 
 class WalletUserTransactionView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = TransferSerializer
+    serializer_class = AccountEntrySerializer
 
     def get(self, request, userid, format=None):
         queryset = self.get_queryset()
@@ -61,13 +61,11 @@ class WalletUserTransactionView(generics.ListAPIView):
         return Response(data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
-        queryset = Transfer.objects.all()
+        queryset = AccountEntry.objects.all()
         if "userid" in self.kwargs and self.kwargs["userid"]:
-            queryset = queryset.filter(
-                destination__wallet__user__id=self.kwargs["userid"]) | queryset.filter(
-                source__wallet__user__id=self.kwargs["userid"])
+            queryset = queryset.filter(account__wallet__user__id=self.kwargs["userid"])
         else:
-            queryset = Transfer.objects.none()
+            queryset = AccountEntry.objects.none()
         return queryset
 
 
