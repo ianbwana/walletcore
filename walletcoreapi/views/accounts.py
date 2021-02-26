@@ -28,11 +28,7 @@ class WalletUserListView(generics.ListAPIView):
     You can also navigate to /api/v1/docs/ to view the swagger documentation:
     https://walletcore.herokuapp.com/api/v1/docs/
 
-    Which should show endpoints for:
-    1.docs
-    2.profiles
-    3.transfers
-    4.users
+    Which should show endpoints for the users endpoints.
 
     If no swagger documentation is on display, click on the session login button to authorize
 
