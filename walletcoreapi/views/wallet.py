@@ -54,9 +54,8 @@ class WalletTransferView(APIView):
                 "action": "tranfer",
                 "message: "Here is some money",
                 "amount": 1000,
-                "source": 5,
                 "destination": 6,
-                "type": "credit"
+                "type": "debit"
             }
 
             NB: The transaction reference is created automatically on the post method
